@@ -1,0 +1,151 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Checkout — M&E</title>
+  <link rel="stylesheet" href="assets/style.css"/>
+  <script defer src="assets/app.js"></script>
+  <script>
+    function serializeCart(){
+      const cart = loadCart();
+      return cart.map(i=>{
+        const p = PRODUCTS.find(pp=>pp.id===i.id);
+        return p? {id:p.id,name:p.name,price:p.price,qty:i.qty}:null;
+      }).filter(Boolean);
+    }
+
+    function fillSummary(){
+      const list = document.querySelector('#summary');
+      const totals = cartTotals();
+      const cart = serializeCart();
+      list.innerHTML = '';
+      if(cart.length===0){
+        list.innerHTML = '<li class="muted">No items.</li>';
+      } else {
+        cart.forEach(line=>{
+          const li = document.createElement('li');
+          li.textContent = `${line.name} × ${line.qty} — ₱${(line.price*line.qty).toFixed(2)}`;
+          list.appendChild(li);
+        });
+      }
+      document.querySelector('#sumTotal').textContent = '₱'+totals.total.toFixed(2);
+    }
+
+    function validateWindow(){
+      if(!isWithinOrderingWindow()){
+        alert('Orders are accepted Mon–Sat, 9:00–5:00 only.');
+        return false;
+      }
+      return true;
+    }
+
+    function enforceTimeSlot(){
+      const slot = document.querySelector('#deliveryTime');
+      const now = new Date();
+      const mins = now.getMinutes();
+      now.setMinutes(mins<30?30:0,0,0);
+      if(mins>=30) now.setHours(now.getHours()+1);
+      const yyyy = now.getFullYear();
+      const mm = String(now.getMonth()+1).padStart(2,'0');
+      const dd = String(now.getDate()).padStart(2,'0');
+      const hh = String(now.getHours()).padStart(2,'0');
+      const min = String(now.getMinutes()).padStart(2,'0');
+      slot.min = `${yyyy}-${mm}-${dd}T09:00`;
+      slot.max = `${yyyy}-${mm}-${dd}T17:00`;
+      slot.value = `${yyyy}-${mm}-${dd}T${hh}:${min}`;
+    }
+
+    function submitOrder(e){
+      e.preventDefault();
+      if(loadCart().length===0){ alert('Your cart is empty.'); return; }
+      if(!validateWindow()) return;
+      // Normally this would POST to Google Apps Script; here we simulate success.
+      // Save a "receipt" to localStorage for the confirmation page.
+      const data = Object.fromEntries(new FormData(document.querySelector('#orderForm')).entries());
+      data.items = serializeCart();
+      data.total = cartTotals().total;
+      localStorage.setItem('lastOrder', JSON.stringify(data));
+      // Clear cart
+      localStorage.removeItem('cart');
+      window.location.href = 'confirmation.html';
+    }
+
+    document.addEventListener('DOMContentLoaded',()=>{
+      fillSummary();
+      enforceTimeSlot();
+      document.querySelector('#orderForm').addEventListener('submit',submitOrder);
+    });
+  </script>
+</head>
+<body>
+  <header class="header">
+    <div class="brand">M&E Frozen Products Store</div>
+    <nav class="nav">
+      <a href="index.html">Products</a>
+      <a href="cart.html">Cart (<span id="cartCount">0</span>)</a>
+    </nav>
+  </header>
+  <div class="container">
+    <div class="notice" id="orderWindowBanner">Loading store status…</div>
+    <h1>Checkout</h1>
+    <div class="row">
+      <div class="col">
+        <div class="card">
+          <h3>Customer Details</h3>
+          <form id="orderForm">
+            <label>Name<input class="input" name="name" required/></label><br/><br/>
+            <label>Mobile<input class="input" name="mobile" required/></label><br/><br/>
+            <label>Email<input class="input" type="email" name="email" required/></label><br/><br/>
+            <label>Order Type
+              <select name="orderType" required>
+                <option value="Delivery">Delivery</option>
+                <option value="Pickup">Pick-up</option>
+              </select>
+            </label><br/><br/>
+            <label>Address (if delivery)
+              <textarea class="input" name="address" placeholder="House/Street, Barangay, City"></textarea>
+            </label><br/><br/>
+            <div class="row">
+              <div class="col">
+                <label>Preferred Date & Time (today)
+                  <input class="input" id="deliveryTime" type="datetime-local" name="preferredDateTime" required/>
+                </label>
+              </div>
+              <div class="col">
+                <label>Payment Method
+                  <select name="payment" required>
+                    <option value="GCash">GCash</option>
+                    <option value="Bank Transfer">Bank Transfer</option>
+                    <option value="COD (Pickup)">Cash on Pick-up</option>
+                  </select>
+                </label>
+              </div>
+            </div><br/>
+            <label>Upload Proof of Payment (optional for GCash/Bank)
+              <input class="input" type="file" name="pop" accept="image/*,application/pdf"/>
+            </label>
+            <hr/>
+            <button class="btn" type="submit">Place Order</button>
+            <span class="small">By placing an order, you agree to our policies.</span>
+          </form>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card">
+          <h3>Order Summary</h3>
+          <ul id="summary"></ul>
+          <strong>Total: <span id="sumTotal">₱0.00</span></strong>
+          <p class="small muted">Quantity limits apply per product. Prices are VAT-inclusive.</p>
+        </div>
+        <div class="card">
+          <h3>Store Policy</h3>
+          <p class="small">Orders accepted Mon–Sat 9:00–17:00. Same-day slots subject to availability. Pick-up at Sampaloc, Manila.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="footer small">© 2025 M&E — Prototype</footer>
+</body>
+</html>

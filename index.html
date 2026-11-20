@@ -1,0 +1,61 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>M&E Frozen Products Store</title>
+  <link rel="stylesheet" href="assets/style.css"/>
+  <script defer src="assets/app.js"></script>
+</head>
+<body>
+  <header class="header">
+    <div class="brand">M&E Frozen Products Store</div>
+    <nav class="nav">
+      <a href="index.html">Products</a>
+      <a href="cart.html">Cart (<span id="cartCount">0</span>)</a>
+    </nav>
+  </header>
+  <div class="container">
+    <div class="notice" id="orderWindowBanner">Loading store status…</div>
+    <h1>Order Your Favorites</h1>
+    <p class="muted">Mon–Sat, 9:00 AM–5:00 PM. Quantity limits per product apply.</p>
+    <div class="grid">
+      <!-- Product Cards -->
+      <div class="card">
+        <div><span class="badge">Beef</span></div>
+        <h3>Burger Patties</h3>
+        <p class="muted">₱150 / pack</p>
+        <div class="row">
+          <button class="btn" onclick="addToCart('p1',1)">Add to Cart</button>
+          <button class="btn secondary" onclick="addToCart('p1',3)">+3</button>
+        </div>
+        <div class="small">Limit: 5</div>
+      </div>
+      <div class="card">
+        <div><span class="badge">Pork</span></div>
+        <h3>Longganisa Garlic</h3>
+        <p class="muted">₱140 / pack</p>
+        <div class="row">
+          <button class="btn" onclick="addToCart('p2',1)">Add to Cart</button>
+          <button class="btn secondary" onclick="addToCart('p2',3)">+3</button>
+        </div>
+        <div class="small">Limit: 8</div>
+      </div>
+      <div class="card">
+        <div><span class="badge">Pork</span></div>
+        <h3>Longganisa Hamonado</h3>
+        <p class="muted">₱140 / pack</p>
+        <div class="row">
+          <button class="btn" onclick="addToCart('p3',1)">Add to Cart</button>
+          <button class="btn secondary" onclick="addToCart('p3',3)">+3</button>
+        </div>
+        <div class="small">Limit: 8</div>
+      </div>
+    </div>
+    <hr/>
+    <p><a class="btn" href="cart.html">Go to Cart</a></p>
+  </div>
+  <footer class="footer small">© 2025 M&E Frozen Products Store — Prototype</footer>
+</body>
+</html>

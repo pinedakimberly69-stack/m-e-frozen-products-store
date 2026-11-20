@@ -1,0 +1,66 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Cart — M&E</title>
+  <link rel="stylesheet" href="assets/style.css"/>
+  <script defer src="assets/app.js"></script>
+  <script>
+    function renderCart(){
+      const tbody = document.querySelector('#cartBody');
+      const totals = cartTotals();
+      tbody.innerHTML = '';
+      const cart = loadCart();
+      if(cart.length===0){
+        tbody.innerHTML = '<tr><td colspan="5" class="muted">Your cart is empty.</td></tr>';
+      }
+      cart.forEach(item=>{
+        const p = PRODUCTS.find(pp=>pp.id===item.id);
+        if(!p) return;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${p.name}</td>
+          <td>₱${p.price.toFixed(2)}</td>
+          <td><input class="input" type="number" min="1" max="${p.limit}" value="${item.qty}" onchange="setQty('${p.id}', parseInt(this.value||1))"/></td>
+          <td>₱${(p.price*item.qty).toFixed(2)}</td>
+          <td><button class="btn secondary" onclick="removeFromCart('${p.id}')">Remove</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+      document.querySelector('#subtotal').textContent = '₱'+totals.subtotal.toFixed(2);
+      document.querySelector('#total').textContent = '₱'+totals.total.toFixed(2);
+    }
+    document.addEventListener('DOMContentLoaded',()=>{
+      renderCart();
+    });
+  </script>
+</head>
+<body>
+  <header class="header">
+    <div class="brand">M&E Frozen Products Store</div>
+    <nav class="nav">
+      <a href="index.html">Products</a>
+      <a href="cart.html">Cart (<span id="cartCount">0</span>)</a>
+    </nav>
+  </header>
+  <div class="container">
+    <div class="notice" id="orderWindowBanner">Loading store status…</div>
+    <h1>Your Cart</h1>
+    <table class="table">
+      <thead><tr><th>Product</th><th>Price</th><th>Qty</th><th>Line Total</th><th></th></tr></thead>
+      <tbody id="cartBody"></tbody>
+      <tfoot>
+        <tr><th colspan="3" style="text-align:right">Subtotal:</th><th id="subtotal">₱0.00</th><th></th></tr>
+        <tr><th colspan="3" style="text-align:right">Total:</th><th id="total">₱0.00</th><th></th></tr>
+      </tfoot>
+    </table>
+    <p>
+      <a class="btn secondary" href="index.html">Continue Shopping</a>
+      <a class="btn" href="checkout.html">Proceed to Checkout</a>
+    </p>
+  </div>
+  <footer class="footer small">© 2025 M&E — Prototype</footer>
+</body>
+</html>

@@ -1,0 +1,55 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Wireframe Sketches — M&E</title>
+  <link rel="stylesheet" href="assets/style.css"/>
+</head>
+<body>
+  <header class="header"><div class="brand">Wireframe Sketches</div><nav class="nav"><a href="index.html">Store</a></nav></header>
+  <div class="container">
+    <div class="card">
+      <h2>Customer Flow (Lo‑fi)</h2>
+<pre class="kbd">
+[Landing/Products]
+  - Header: Logo + Cart
+  - Notice: "Mon–Sat 9–5"
+  - Product grid:
+     [Card] Name | Price | (+) Add | (+3)
+     Limit hint (e.g., "Limit: 5")
+
+[Cart]
+  - Table: Product | Price | Qty (1..limit) | Line total | Remove
+  - Totals: Subtotal, Total
+  - CTA: Continue Shopping | Checkout
+
+[Checkout]
+  - Customer details: Name, Mobile, Email
+  - Order type: Delivery / Pick-up
+  - Address (if delivery)
+  - Preferred Date & Time (today only, 09:00–17:00)
+  - Payment: GCash | Bank | COD (Pickup)
+  - Upload Proof (optional for non-COD)
+  - Summary: itemized + total
+  - CTA: Place Order (disabled outside window)
+
+[Confirmation]
+  - Thank-you message + order reference
+  - Summary payload (for Sheets/API)
+  - Back to Store
+</pre>
+    </div>
+    <div class="card">
+      <h3>Business Rules (embedded in prototype)</h3>
+      <ul>
+        <li>Ordering window: Mon–Sat, 09:00–17:00 (Asia/Manila)</li>
+        <li>Quantity limits per product (Burger Patties: 5; Longganisa Garlic/Hamonado: 8)</li>
+        <li>Payment methods: GCash, Bank Transfer, Cash on Pick-up</li>
+        <li>Delivery/Pick-up choice + preferred same-day slot</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,41 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Order Confirmed — M&E</title>
+  <link rel="stylesheet" href="assets/style.css"/>
+  <script defer src="assets/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded',()=>{
+      const data = JSON.parse(localStorage.getItem('lastOrder')||'null');
+      if(!data){
+        document.querySelector('#content').innerHTML = '<p class="muted">No recent order found.</p>';
+        return;
+      }
+      const pre = document.querySelector('#payload');
+      pre.textContent = JSON.stringify(data,null,2);
+    });
+  </script>
+</head>
+<body>
+  <header class="header">
+    <div class="brand">M&E Frozen Products Store</div>
+    <nav class="nav">
+      <a href="index.html">Products</a>
+    </nav>
+  </header>
+  <div class="container">
+    <div class="card">
+      <h2>🎉 Thank you! Your order has been placed.</h2>
+      <p class="muted">A confirmation email will be sent (prototype placeholder). Below is the payload that would be sent to Google Sheets / Apps Script.</p>
+      <div id="content">
+        <pre id="payload" class="kbd" style="white-space:pre-wrap;word-break:break-word;"></pre>
+      </div>
+      <p><a class="btn" href="index.html">Back to Store</a></p>
+    </div>
+  </div>
+  <footer class="footer small">© 2025 M&E — Prototype</footer>
+</body>
+</html>
